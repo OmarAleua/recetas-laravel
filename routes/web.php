@@ -1,6 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RecetaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +19,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+//Route::get('/recetas', 'RecetaController'); //esta ruta no funciona
+
+/* Route::get('/recetas', [RecetaController::class, '__invoke']); */
+
+Auth::routes();
+
+/* Route::get('/home', [HomeController::class, 'index'])->name('home'); */
+
+Route::resource('/recetas', RecetaController::class)->names('recetas');
