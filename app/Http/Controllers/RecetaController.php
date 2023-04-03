@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Receta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RecetaController extends Controller
 {
+    //proteccion para que no ingrese un usuario que no esta registrado
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -32,8 +39,10 @@ class RecetaController extends Controller
      */
     public function create()
     {
-        //
-        return view('recetas.create');
+        //DB::table('categoria_receta')->get()->pluck('nombre', 'id')->dd();
+        $categorias = DB::table('categoria_receta')->get()->pluck('nombre', 'id');
+
+        return view('recetas.create', compact('categorias'));
     }
 
     /**
@@ -44,7 +53,29 @@ class RecetaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //asigna todo el request a data
+        $data = $request->validate([
+            'titulo' => 'required|min:6',
+            'categoria' => 'required',
+            'ingredientes' => 'required',
+            'preparacion' => 'required'
+        ]);
+
+        //validar si hay un archivo en el request
+        /* if ($request->('titulo')) {
+            $article['image'] = $request->file('image')->store('articles');
+        } */
+
+        //hace la insercion a la DB
+        DB::table('recetas')->insert([
+            'titulo' => $data['titulo']
+        ]);
+
+        //redireccionamos a index
+        return redirect()->action([RecetaController::class, 'index']);
+
+        //para mostrar la info en json
+        //dd($request);
     }
 
     /**

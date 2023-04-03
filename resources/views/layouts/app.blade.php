@@ -15,6 +15,8 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    @yield('styles')<!--lo puso para cargar trix editor-->
 </head>
 <body>
     <div id="app">
@@ -84,5 +86,7 @@
             </div>
         </div>
     </div>
+
+    @yield('scripts')<!--lo puso para cargar trix editor-->
 </body>
 </html>

@@ -2,7 +2,7 @@
 
 @section('botones')
 
-<a class="btn btn-primary mr-2" href="{{ route('recetas.create') }}">Crear Receta</a>
+    <a class="btn btn-primary mr-2" href="{{ route('recetas.create') }}">Crear Receta</a>
 
 @endsection
 
