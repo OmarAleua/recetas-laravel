@@ -34,3 +34,17 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
 // });
+
+//Instalar Momentjs
+import moment from 'moment';
+import VueMoment from 'vue-moment';
+
+require('moment/locale/es');
+moment.locale('es');
+
+Vue.use(VueMoment, (moment));
+
+console.log(moment().format());
+
+//segun el video que estoy viendo
+window.moment = require('moment');

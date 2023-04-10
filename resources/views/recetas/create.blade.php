@@ -13,10 +13,10 @@
 
     <div class="row justify-content-center mt-5">
         <div class="col-md-8">
-            <form method="POST" action="{{ route('recetas.store') }}" novalidate>
+            <form method="POST" action="{{ route('recetas.store') }}" enctype="multipart/form-data" novalidate>
                 @csrf
 
-                <div class="form-group">
+                <div class="form-group  mt-3">
                     <label for="titulo">Titulo Receta</label>
 
                     <input type="text" 
@@ -29,59 +29,73 @@
                         <!--el old del value es para que persista lo ultimo escrito-->
                     @error('titulo')
                         <span class="invalid-feedback d-block" role="alert">
-                            <strong>{{ $message}}</strong>
+                            <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
 
-                <div class="form-group">
+                <div class="form-group  mt-3">
                     <label for="categoria">Categoria</label>
                     <select
                         name="categoria"
                         class="form-control @error('categoria') is-invalid @enderror"
                         id="categoria">
                         <option value="">--Seleccione--</option>
-                        @foreach($categorias as $id => $categoria)
-                            <option value="{{ $id }}" {{ old('categoria') == $id ? 'selected' : "" }}>{{ $categoria}}</option>
+                        @foreach($categorias as $categoria)
+                            <option value="{{ $categoria->id }}" {{ old('categoria') == $categoria->id ? 'selected' : "" }}>{{ $categoria->nombre }}</option>
                         @endforeach                        
                     </select>
                     @error('categoria')
                         <span class="invalid-feedback d-block" role="alert">
-                            <strong>{{ $message}}</strong>
+                            <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
 
-                <div class="form-group" mt-3>
+                <div class="form-group  mt-3">
                     <label for="ingredientes">Ingredientes</label>                    
-                    <input id="ingredientes" type="hidden" name="ingredientes" value={{ old('ingredientes') }}>
+                    <input id="ingredientes" type="hidden" name="ingredientes" value="{{ old('ingredientes') }}">
                     <trix-editor 
-                        class="form-control @error('ingredientes') in-invalid @enderror"
+                        class="form-control @error('ingredientes') is-invalid @enderror"
                         input="ingredientes">
                     </trix-editor>
                     @error('ingredientes')
                         <span class="invalid-feedback d-block" role="alert">
-                            <strong>{{ $message}}</strong>
+                            <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
 
-                <div class="form-group" mt-3>
+                <div class="form-group mt-3">
                     <label for="preparacion">Preparacion</label>                    
-                    <input id="preparacion" type="hidden" name="preparacion" value={{ old('preparacion') }}>
+                    <input id="preparacion" type="hidden" name="preparacion" value="{{ old('preparacion') }}">
                     <trix-editor 
-                        class="form-control @error('preparacion') in-invalid @enderror" 
+                        class="form-control @error('preparacion') is-invalid @enderror"
                         input="preparacion">
                     </trix-editor>
                     @error('preparacion')
                         <span class="invalid-feedback d-block" role="alert">
-                            <strong>{{ $message}}</strong>
+                            <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
 
-                <div class="form-group" mt-3>
-                    <input type="submit" class="btn btn-primary" value="Agregar receta" >
+                <div class="form-group  mt-3">
+                    <label for="imagen">Elige la imagen</label>
+                    <input 
+                        id="imagen"
+                        type="file" 
+                        class="form-control @error('imagen') is-invalid @enderror" 
+                        name="imagen">
+                    @error('imagen')
+                        <span class="invalid-feedback d-block" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+
+                <div class="form-group  mt-3">
+                    <input type="submit" class="btn btn-primary" value="Agregar receta">
                 </div>   
 
             </form>

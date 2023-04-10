@@ -15,37 +15,37 @@ class CategoriasSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('categoria_receta')->insert([
+        DB::table('categoria_recetas')->insert([
             'nombre' => 'Ensaladas',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('categoria_receta')->insert([
+        DB::table('categoria_recetas')->insert([
             'nombre' => 'Carnes',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('categoria_receta')->insert([
+        DB::table('categoria_recetas')->insert([
             'nombre' => 'Empanadas',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('categoria_receta')->insert([
+        DB::table('categoria_recetas')->insert([
             'nombre' => 'Pastas',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('categoria_receta')->insert([
+        DB::table('categoria_recetas')->insert([
             'nombre' => 'Postres',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('categoria_receta')->insert([
+        DB::table('categoria_recetas')->insert([
             'nombre' => 'Pizzas',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categoria_receta', function (Blueprint $table) {
+        Schema::create('categoria_recetas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
             $table->timestamps();
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->text('preparacion');
             $table->string('imagen');
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('categoria_id')->index('id')->on('categoria_receta');
+            $table->foreignId('categoria_id')->index('id')->on('categoria_recetas');
             $table->timestamps();
         });
     }

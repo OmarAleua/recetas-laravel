@@ -13,10 +13,11 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+    @yield('styles')<!--lo puso para cargar trix editor-->
+    
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
-    @yield('styles')<!--lo puso para cargar trix editor-->
 </head>
 <body>
     <div id="app">

@@ -3,15 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Receta;
+use Termwind\Components\Dd;
 use Illuminate\Http\Request;
+use App\Models\CategoriaReceta;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\HTTP;
+use Intervention\Image\Facades\Image;
 
 class RecetaController extends Controller
 {
     //proteccion para que no ingrese un usuario que no esta registrado
     public function __construct()
     {
-        $this->middleware('auth');
+        //con esta funcion protegemos todos los metodos 
+        //ninguna persona puede editar sin haberse registrado
+        //pero con la funcion except, dejamos abierto el metodo show para que vea cualquier persona
+        //para mantener 2 metodos abiertos: $this->middleware('auth', ['except' => ['show', 'create']]);
+        $this->middleware('auth', ['except' => 'show']);
     }
 
     /**
@@ -21,14 +30,26 @@ class RecetaController extends Controller
      */
     public function index()
     {
-        //
-        $recetas = [
+        //prueba traer datos de API externa: SI FUNCIONA - MUESTRA TODO
+        /* $usuarios = HTTP::get('https://reqres.in/api/users');
+        return view('recetas.index', compact('usuarios')); */
+        
+        //traemos toda la info del modelo
+        //Auth::user()->recetas->dd();
+        //auth()->user()->recetas->dd(); - ESTA ES OTRA FORMA DE MOSTRAR LO MISMO DE ARRIBA
+
+        $recetas = Auth::user()->recetas;
+
+        // esto se hace para ver la info de forma estatica
+        /* $recetas = [
             'pizza especial', 'lemon pie', 'Cerveza',
         ];
         $categorias = [
             'Postres', 'Carnes', 'Bebidas',
-        ];
-        return view('recetas.index', compact('recetas', 'categorias'));
+        ]; */
+
+        //redirige a recetas.index
+        return view('recetas.index', compact('recetas'));
 
     }
 
@@ -39,8 +60,11 @@ class RecetaController extends Controller
      */
     public function create()
     {
+        //obtener las categorias con modelo
+        $categorias = CategoriaReceta::all(['id', 'nombre']);
         //DB::table('categoria_receta')->get()->pluck('nombre', 'id')->dd();
-        $categorias = DB::table('categoria_receta')->get()->pluck('nombre', 'id');
+        //obtener las categorias sin modelo
+        /* $categorias = DB::table('categoria_recetas')->get()->pluck('nombre', 'id'); */
 
         return view('recetas.create', compact('categorias'));
     }
@@ -53,29 +77,52 @@ class RecetaController extends Controller
      */
     public function store(Request $request)
     {
-        //asigna todo el request a data
+        /* dd ( $request->all() ); MUESTRA TODO LO QUE ENVIAMOS A LA DB EN FORMATO JSON Y DETIENE LA EJECUCION*/
+        /* dd ( $request['imagen']->store('upload-recetas', 'public') ); */
+
+        //asigna todo el request a data : VALIDATION
         $data = $request->validate([
             'titulo' => 'required|min:6',
             'categoria' => 'required',
             'ingredientes' => 'required',
-            'preparacion' => 'required'
+            'preparacion' => 'required',
+            'imagen' => 'required|image'
         ]);
 
         //validar si hay un archivo en el request
         /* if ($request->('titulo')) {
             $article['image'] = $request->file('image')->store('articles');
         } */
+        $ruta_imagen = $request['imagen']->store('upload-recetas', 'public');
 
-        //hace la insercion a la DB
-        DB::table('recetas')->insert([
-            'titulo' => $data['titulo']
+        //resize de la imagen
+        $img = Image::make( \public_path("storage/{$ruta_imagen}"))->fit(1000,550);
+        $img->save();
+
+        //hace la insercion a la DB sin el modelo
+        /* DB::table('recetas')->insert([
+            'titulo' => $data['titulo'],
+            'preparacion' => $data['preparacion'],
+            'ingredientes' => $data['ingredientes'],
+            'imagen' => $ruta_imagen,
+            'user_id' => Auth::user()->id,
+            'categoria_id' => $data['categoria']
+        ]); */
+
+        //hace la insercion a la DB con el modelo
+        Auth::user()->recetas()->create([
+            'titulo' => $data['titulo'],
+            'preparacion' => $data['preparacion'],
+            'ingredientes' => $data['ingredientes'],
+            'imagen' => $ruta_imagen,
+            'categoria_id' => $data['categoria']
         ]);
 
         //redireccionamos a index
         return redirect()->action([RecetaController::class, 'index']);
 
         //para mostrar la info en json
-        //dd($request);
+        //dd($request->all());
     }
 
     /**
@@ -87,6 +134,7 @@ class RecetaController extends Controller
     public function show(Receta $receta)
     {
         //
+        return view('recetas.show', compact('receta'));
     }
 
     /**
