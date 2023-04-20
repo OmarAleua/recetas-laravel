@@ -6,6 +6,7 @@
 
 import './bootstrap';
 
+
 window.Vue = require('vue');
 
 /**
@@ -32,6 +33,7 @@ app.component('example-component', ExampleComponent); */
 // });
 Vue.config.ignoredElements = ['trix-editor', 'trix-toolbar'];
 Vue.component('fecha-receta', require('./components/FechaReceta.vue').default);
+Vue.component('eliminar-receta', require('./components/EliminarReceta.vue').default);
 /**
  * Finally, we will attach the application instance to a HTML element with
  * an "id" attribute of "app". This element is included with the "auth"

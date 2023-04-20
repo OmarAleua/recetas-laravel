@@ -10,7 +10,11 @@ import 'bootstrap';
  */
 
 import axios from 'axios';
+import moment from 'moment';
+import VueMoment from 'vue-moment';
+
 window.axios = axios;
+window.moment = moment;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -36,15 +40,12 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // });
 
 //Instalar Momentjs
-import moment from 'moment';
-import VueMoment from 'vue-moment';
 
-require('moment/locale/es');
-moment.locale('es');
-
-Vue.use(VueMoment, (moment));
+/* const now = moment(); */ // devuelve un objeto moment con la fecha y hora actual
+require('moment/locale/es'); 
+moment.locale('es'); // establece globalmente español como idioma
+Vue.use(VueMoment, {moment})
 
 console.log(moment().format());
 
-//segun el video que estoy viendo
-window.moment = require('moment');
+
